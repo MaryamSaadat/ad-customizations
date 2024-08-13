@@ -1,7 +1,13 @@
 export { default as UploadVideo} from './UploadVideo';
 export { default as ConsentPage} from './ConsentPage';
-export { default as WoSummaryPage} from './WoSummaryPage';
 export { default as TestingPage} from './TestingPage';
 export { default as FinalPage} from './FinalPage';
 export { default as AllVideos} from './AllVideos';
 export { default as Responses} from './Responses';
+export { default as SurveyStart} from './SurveyStart';
+export { default as SurveyPage} from './SurveyPage';
+export { default as CustomizePage} from './CustomizePage';
+export { default as TypeOfDescriptions} from './TypeOfDescriptions';
+export { default as NoDescPage} from './NoDescPage';
+export { default as FinalSurvey} from './FinalSurvey';
+export { default as NoDescSurvey} from './NoDescSurvey';

@@ -2,6 +2,7 @@ import "survey-core/defaultV2.min.css";
 import { Model } from "survey-core";
 import { Survey } from "survey-react-ui";
 import { infoData } from "../data/infoData";
+import { themeJson } from "../data/theme";
 import { db, auth, storage } from "../config/firebase";
 import {
   collection,
@@ -13,47 +14,19 @@ import { useNavigate } from "react-router-dom";
 
 const infoJson = infoData;
 
-// const PersonalInfo = () => {
-//   const survey = new Model(infoJson);
-//   const navigate = useNavigate();
-//   const infoCollectionRef = collection(db, "personalInfo");
-
-//   // Define the surveyComplete callback function
-//   const surveyComplete = (sender) => {
-//     onSubmitInfo(sender.data);
-//   };
-
-//   // Conditionally add the callback to the survey
-//   if (infoJson) {
-//     survey.onComplete.add(surveyComplete);
-//   }
-
-//   const onSubmitInfo = async (info) => {
-//     localStorage.setItem('particpant-code', info.participantCode);
-//     navigate('/VideoPage', { state: { watched: [] } });
-//     try {
-//       await addDoc(infoCollectionRef, info);
-//     } catch (err) {
-//       console.error("This is my error:", err);
-//     }
-//   };
-
-//   return <Survey model={survey} />;
-// };
-
 
 const PersonalInfo = () => {
   const survey = new Model(infoJson);
   const navigate = useNavigate();
-  const infoCollectionRef = collection(db, "personalInfo");
+  survey.applyTheme(themeJson);
+  const infoCollectionRef = collection(db, "demographic-info");
 
   const onSubmitInfo = async (info) => {
-    // console.log(info)
-    // console.log(info.participantCode)
-    localStorage.setItem('particpant-code', info.participantCode);
-    navigate('/Testing')
+    const participantCode = localStorage.getItem('participantCode');
+    const updatedInfo = { ...info, participantCode };
+    navigate('/Type')
     try {
-      await addDoc(infoCollectionRef, info);
+      await addDoc(infoCollectionRef, updatedInfo);
     } catch (err) {
       console.error("This is my error:",err);
     }

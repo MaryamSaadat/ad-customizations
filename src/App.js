@@ -1,8 +1,8 @@
 
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import {Box, createTheme, ThemeProvider} from '@mui/material';
-import { Instructional, PersonalInfo, SurveyPage, VideoPage} from './components';
-import {UploadVideo, ConsentPage, WoSummaryPage, TestingPage, FinalPage, AllVideos, Responses} from './pages/index'
+import {  PersonalInfo, VideoPage} from './components';
+import {UploadVideo, NoDescPage, ConsentPage, TestingPage, FinalPage, AllVideos, Responses, SurveyStart, SurveyPage, CustomizePage, TypeOfDescriptions, FinalSurvey, NoDescSurvey} from './pages/index'
 
 const theme = createTheme({
   // The colurs are turned opposite
@@ -27,17 +27,21 @@ const App = () => (
     <Box sx={{backgroundColor : '#F3F3F3'}}>
         <Routes>
         {/* Home here is the feed */}
-            <Route path='/' exact element={<ConsentPage />} />
-            <Route path='/Instructional' exact element={<Instructional/>} />
+            <Route path='/Consent' exact element={<ConsentPage />} />
             <Route path='/VideoPage' element={<VideoPage/>} />
+            <Route path='/NoDesc' element={<NoDescPage/>} />
             <Route path='/Survey' element={<SurveyPage/>} />
-            <Route path='/SurveywoSummary' element={<WoSummaryPage/>} />
             <Route path='/Info' element={<PersonalInfo/>} />
             <Route path='/Video' element={<UploadVideo/>} />
+            <Route path='/Customize' element={<CustomizePage/>} />
             <Route path='/Testing' element={<TestingPage/>} />
             <Route path='/End' element={<FinalPage/>} />
             <Route path='/AllVideos' element={<AllVideos/>} />
             <Route path='/Responses' element={<Responses/>} />
+            <Route path='/Type' element={<TypeOfDescriptions/>} />
+            <Route path='/FinalSurvey' element={<FinalSurvey/>} />
+            <Route path='/NoDescSurvey' element={<NoDescSurvey/>} />
+            <Route path='/' element={<SurveyStart/>} />
         </Routes>
     </Box>
     </BrowserRouter>

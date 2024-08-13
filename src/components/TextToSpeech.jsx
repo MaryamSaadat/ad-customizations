@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button } from "@mui/material";
+import { Button, Slider} from "@mui/material";
 import axios from "axios"; // Import axios
 
 const TextToSpeech = ({ text, parentCallback }) => {
   const [audioFile, setAudioFile] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [speed, setSpeed] = useState(1.0); // Default speed
   const audioRef = useRef();
+
+  const handleSpeedChange = (event, newValue) => {
+    setSpeed(newValue);
+  };
 
   useEffect(() => {
     handleTextToSpeech();
@@ -15,7 +20,7 @@ const TextToSpeech = ({ text, parentCallback }) => {
     const audioRecieved = {
       method: "GET",
       url: "https://ad-ai-study.onrender.com/speech",
-      params: {textToConvert: text}
+      params: {textToConvert: text, speed: speed.toString(),}
     };
     axios.request(audioRecieved).then((response) => {
       // console.log("Response:", response.data.data); 
@@ -55,9 +60,20 @@ const TextToSpeech = ({ text, parentCallback }) => {
       <div>
         <audio ref={audioRef} />
         <div>
-          <button onClick={togglePlay}>
-            {isPlaying ? <p>Pause</p> : <p>Play</p>}
-          </button>
+          {/* <button onClick={togglePlay}>
+            {isPlaying ? <p>Pause audio description</p> : <p>Play audio description</p>}
+          </button> */}
+        </div>
+        <div>
+          <Slider
+            value={speed}
+            min={0.5}
+            max={2.0}
+            step={0.1}
+            onChange={handleSpeedChange}
+            aria-labelledby="This slider allows you to adjust the speed of the description as it is played"
+          />
+          <p>Speed of audio description: {speed.toFixed(1)}x</p>
         </div>
       </div>
     </div>

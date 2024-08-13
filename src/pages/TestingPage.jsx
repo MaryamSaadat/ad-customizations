@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, VideoPlayer, VideoCard, Navbar } from "../components/index";
-import complete_description from "../data/descriptions";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Grid, Stack, Box, Button, Typography } from "@mui/material";
 import { db, auth, storage } from "../config/firebase";
@@ -51,21 +50,9 @@ const TestingPage = () => {
     return <div>Loading...</div>;
   }
 
-  const formatData = (data) => {
-    const formattedData = data.descriptions.map((description, index) => ({
-      descriptions: description,
-      time_stamp_start: data.time_stamp_start[index],
-      time_stamp_end: data.time_stamp_end[index],
-    }));
-    return formattedData;
-  };
-
-  const handleCallback = (val, times) => {
-    console.log("hello there", val);
-  };
 
   const handleEnd = () => {
-    navigate("/VideoPage", { state: { watched: [1] } });
+    navigate("/Customize", { state: { watched: [1] } });
   };
 
   return (
@@ -82,38 +69,27 @@ const TestingPage = () => {
           borderBottom: "3px solid #19b394",
         }}
       >
-        <Typography variant="body1" color={"black"}>
-          You will be watching a series of 1-2 minute long videos. 
+        <Typography variant="h6" color={"black"}>
+          You will be watching a 1-2 minute long video, without any audio descriptions.
           <br/>
-          Each video has an audio description, to request a concise description press "C" on your keypad.
+          Once you are done watching the video, proceed to the next page
           <br/>
-          For a detailed audio description, press "D" on your keypad.
-          <br/>
-          Once you feel comfortable with the interface you can proceed with the study.
+          Once you are on the next page, you will select a series of customizations for audio descriptions you want with the video you just watched.
         </Typography>
       </Stack>
       <Box
         p={2}
         sx={{
           overflowY: "auto",
-          height: "95vh",
           flex: 2,
         }}
       >
         <Grid container spacing={2} p={3}>
           <Grid item md={8}>
             {console.log("My descriptions: ", descriptions)}
-            <VideoPlayer
-              completeDescrip={formatData(
-                descriptions.completeDescriptions["detailed"]
-              )} // Pass the selected description type
-              conciseDescrip={formatData(
-                descriptions.completeDescriptions["concise"]
-              )} // Pass the selected description type
-              path={descriptions.videoPath}
-              title={descriptions.title}
-              parentCallback={handleCallback}
-            />
+            <video id="video" controls width="100%" height="500px">
+        <source src={descriptions.videoPath} type="video/mp4" />
+        </video>
           </Grid>
 
           <Grid item md={4}>
@@ -126,7 +102,7 @@ const TestingPage = () => {
               className="category-btn"
               onClick={handleEnd}
             >
-              Start User Study
+              Proceed to Customizations
             </Button>
           </Grid>
         </Grid>

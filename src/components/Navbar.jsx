@@ -14,7 +14,7 @@ const Navbar = ({text}) => {
       borderBottom: "3px solid #19b394",
       }}>
 
-    <Typography variant='h4' color={'#19b394'}>{text}</Typography>
+    <Typography variant='h4'>{text}</Typography>
   </Stack>
   )
 }

@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { Navbar } from "../components";
 import { useNavigate } from "react-router-dom";
-import { db, auth, storage } from "../config/firebase";
-import { collection, getDocs, addDoc, doc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
 
 const ConsentPage = () => {
   const [checked, setChecked] = useState(false);
@@ -31,7 +31,6 @@ const ConsentPage = () => {
   };
 
   const handleProceed = async () => {
-    // Add your proceed logic here
     if (checked) {
       if (name.trim() === "" || date.trim() === "") {
         alert("Please provide your name and the date.");
@@ -40,9 +39,9 @@ const ConsentPage = () => {
           participantName: name,
           dateSigned: date,
           consent:
-            "I agree to be audio recorded and to allow the study investigators to keep my de-identified data to be used in future research studies as described above.",
+            "I confirm that I have the eligibility criteria and I consent to participate in this study.",
         };
-        const consentRef = collection(db, "consents");
+        const consentRef = collection(db, "consent");
         try {
           await addDoc(consentRef, data);
           navigate("/Info");
@@ -59,6 +58,7 @@ const ConsentPage = () => {
     <>
       <Navbar text="CONSENT TO PARTICIPATE IN RESEARCH" />
       <Box
+        component="main"
         display="flex"
         flexDirection="column"
         alignItems="flex-start"
@@ -66,8 +66,10 @@ const ConsentPage = () => {
         textAlign="left"
         padding={10}
       >
-        <Typography variant="h6">Introduction:</Typography>
-        <Typography variant="body1">
+        <Typography variant="h6" tabIndex={0}>
+          Introduction:
+        </Typography>
+        <Typography variant="body1" tabIndex={0}>
           You are invited to take part in a research study being conducted by
           Sri Kurniawan from the department of Computational Media at the
           University of California, Santa Cruz and Pooyan Fazli and Hasti Seifi
@@ -76,81 +78,85 @@ const ConsentPage = () => {
           if there is anything that you do not understand. There will be about
           20 blind and low vision participants in this study.
         </Typography>
-        <Typography variant="h6">Purpose:</Typography>
-        <Typography variant="body1">
-          The purpose of the study is to evaluate automatically generated
+        <Typography variant="h6" tabIndex={0}>
+          Purpose:
+        </Typography>
+        <Typography variant="body1" tabIndex={0}>
+          The purpose of the study is to evaluate AI-generated customized
           descriptions for YouTube videos for users with blindness and visual
           impairments.
         </Typography>
-        <Typography variant="h6">What you will do in the study?</Typography>
-        <Typography variant="body1">
-          If you decide to take part in this study, you will: be trained to use
-          our tools that describe videos and answer your questions about what’s
-          going on in the video. You will then use different variations of the
-          while watching several YouTube videos.
+        <Typography variant="h6" tabIndex={0}>
+          What you will do in the study?
+        </Typography>
+        <Typography variant="body1" tabIndex={0}>
+          For this study, we would like to ask you to view and rate various
+          audio descriptions.
           <br />
-          You will complete an online survey. The survey will ask about what
-          happened in the videos and rate the usefulness of the tools you used.{" "}
-          <br />
-          You will also participate in an interview with a member of the study
-          team. In the interview you will be asked about your needs and your
-          experiences with the tool.
-          <br />
-          As part of this project, an audio recording will be made of you during
-          your participation. You have the right to request that the recording
-          be stopped or erased in full or in part at any time. In any use of the
-          audio recording, you will not be identified by name. Please note below
-          the uses of the recordings to which you are consenting.
-          <ol>
+          The study will consist of two parts:
+          <ol tabIndex={0}>
             <li>
-              The audio recording will be used by the investigators in this
-              research study.
+              You will be asked to fill out a short demographic questionnaire at
+              the start.
             </li>
             <li>
-              The audio recording can be used for scientific publications.
+              You will complete an online survey. You will watch a few short
+              videos. For each video, you will watch it a few times with
+              different variations of descriptions. After watching each video,
+              you will provide ratings based on a few different metrics. The
+              expected time spent on the survey is about 25-30 minutes,
+              including watching the videos with different customizations of the
+              descriptions, and rating the descriptions according to the
+              evaluation metrics.
             </li>
           </ol>
         </Typography>
-        <Typography variant="h6">Time Required:</Typography>
-        <Typography variant="body1">
-          Your participation will take about 75 minutes.
+        <Typography variant="h6" tabIndex={0}>
+          Time Required:
         </Typography>
-        <Typography variant="h6">Risks or Discomforts:</Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" tabIndex={0}>
+          Your participation will take about 25-30 minutes.
+        </Typography>
+        <Typography variant="h6" tabIndex={0}>
+          Risks or Discomforts:
+        </Typography>
+        <Typography variant="body1" tabIndex={0}>
           There is a risk of loss of privacy. However, no names or identities
           will be used in any published reports of the research. Only the
           researcher will have access to the research data. There is no
           potential for you to experience risks related to the political, social
           or economic context in which you live.
         </Typography>
-        <Typography variant="h6">
+        <Typography variant="h6" tabIndex={0}>
           What benefits can be reasonably expected?
         </Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" tabIndex={0}>
           Although there will be no direct benefit to you for taking part in
           this study, the study investigators may learn more about how to design
           tools that are useful in providing information about a video for blind
           and low vision users.
         </Typography>
-        <Typography variant="h6">
+        <Typography variant="h6" tabIndex={0}>
           What happens if you change your mind about participating?
         </Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" tabIndex={0}>
           If you decide that you no longer wish to continue in this study, you
           will be requested to: leave the study setup.
           <br />
           You will be told if any important new information is found during the
           course of this study that may affect your wanting to continue.
         </Typography>
-        <Typography variant="h6">
+        <Typography variant="h6" tabIndex={0}>
           Can you be withdrawn from the study without your consent?
         </Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" tabIndex={0}>
           You may be withdrawn from the study if you do not follow the
           instructions given you by the study investigators.
         </Typography>
-        <Typography variant="h6">Confidentiality:</Typography>
-        <Typography variant="body1">
+        <Typography variant="h6" tabIndex={0}>
+          Confidentiality:
+        </Typography>
+        <Typography variant="body1" tabIndex={0}>
           This research is covered by a Certificate of Confidentiality from the
           National Institutes of Health. This means that the researchers cannot
           release or use information, documents, or samples that may identify
@@ -181,9 +187,9 @@ const ConsentPage = () => {
           <br />
           The research data will be kept in a secure location and only the
           researcher will have access to the data. All research data will be
-          stored in an encrypted document on a password protected computer. All
+          stored in an encrypted document on a password-protected computer. All
           research data will be stored in a device with full disk encryption and
-          password-protection. The data may be used in the future only for
+          password protection. The data may be used in the future only for
           research purposes consistent with the original purpose of the research
           stated in this consent. Any identifiable information will be kept
           locked in the faculty member’s office.
@@ -208,26 +214,30 @@ const ConsentPage = () => {
           the recordings will be erased. Your name will not be in the transcript
           or study notes.
         </Typography>
-        <Typography variant="h6">Compensation:</Typography>
-        <Typography variant="body1">
-          You will receive $50 Amazon gift certificate for participating in this
+        <Typography variant="h6" tabIndex={0}>
+          Compensation:
+        </Typography>
+        <Typography variant="body1" tabIndex={0}>
+          You will receive $25 Amazon gift certificate for participating in this
           study.
         </Typography>
-        <Typography variant="h6">
+        <Typography variant="h6" tabIndex={0}>
           Are there any costs associated with participating in this study?
         </Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" tabIndex={0}>
           There will be no cost to you for participating in this study.
         </Typography>
-        <Typography variant="h6">
+        <Typography variant="h6" tabIndex={0}>
           What if you are injured as a direct result of being in this study?
         </Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" tabIndex={0}>
           If this study causes you any injury, you should write or call Sri
           Kurniawan at 831-459-1037.
         </Typography>
-        <Typography variant="h6">Voluntary Participation: </Typography>
-        <Typography variant="body1">
+        <Typography variant="h6" tabIndex={0}>
+          Voluntary Participation:
+        </Typography>
+        <Typography variant="body1" tabIndex={0}>
           Your participation is completely voluntary; you are free to change
           your mind at any time and quit the study.
           <br />
@@ -242,47 +252,65 @@ const ConsentPage = () => {
           <br />
           You will receive partial payment for the study of $20.
         </Typography>
-        <Typography variant="h6">Rights and Concerns:</Typography>
-        <Typography variant="body1">
-          If you have questions about this research study, please contact Sri
-          Kurniawan, Professor, SOE-3, 1156 High Street, Santa Cruz CA 95064,
-          phone: 831-459-1037, email: skurnia@ucsc.edu. If you have any
-          questions regarding your rights as a research participant, please
-          contact the University of California Santa Cruz, Office of Research
-          Compliance Administration at 831-459-1473 or orca@ucsc.edu.
+        <Typography variant="h6" tabIndex={0}>
+          Rights and Concerns:
         </Typography>
-        <Typography variant="h6">Participant Information:</Typography>
+        <Typography variant="body1" tabIndex={0}>
+          If you have questions about this research study, please contact Maryam
+          Cheema (mcheema2@asu.edu). If you have any questions regarding your
+          rights as a research participant, please contact the University of
+          California Santa Cruz, Office of Research Compliance Administration at
+          831-459-1473 or orca@ucsc.edu.
+        </Typography>
+        <Typography variant="h6" tabIndex={0}>
+          Participant Information:
+        </Typography>
         <TextField
           label="Name"
           variant="outlined"
           value={name}
           onChange={handleNameChange}
+          aria-label="Participant Name"
           sx={{ marginBottom: 2 }}
+          required
+          inputProps={{
+            "aria-describedby": "name-description",
+          }}
         />
         <TextField
           type="date"
           variant="outlined"
           value={date}
           onChange={handleDateChange}
+          aria-label="Date Signed"
           sx={{ marginBottom: 2 }}
+          required
+          inputProps={{
+            "aria-describedby": "date-description",
+          }}
         />
         <FormControlLabel
           sx={{ marginTop: "20px" }}
-          control={<Checkbox checked={checked} onChange={handleChange} />}
-          label="I agree to be audio recorded and to allow the study investigators to keep my de-identified data to be used in future 
-research studies as described above."
+          control={
+            <Checkbox
+              checked={checked}
+              onChange={handleChange}
+              aria-label="Consent to participate"
+            />
+          }
+          label="I confirm that I have the eligibility criteria and I consent to participate in this study."
         />
-        <br />
         <Button
+          variant="contained"
+          color="primary"
+          aria-label="Proceed to the user study"
           sx={{
-            backgroundColor: "secondary.main",
-            color: "white",
-            margin: "10px",
+            fontSize: "1rem",
+            marginTop: "1rem",
+            fontWeight: "bold",
           }}
-          className="category-btn"
           onClick={handleProceed}
           disabled={!checked}
-          style={{ marginTop: "10px" }}
         >
           Proceed to user study
         </Button>
