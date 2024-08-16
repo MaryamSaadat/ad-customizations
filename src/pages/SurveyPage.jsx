@@ -1,69 +1,80 @@
-import React, { useCallback } from "react";
-import 'survey-core/defaultV2.min.css';
-import { Model } from 'survey-core';
-import { Survey } from 'survey-react-ui';
-import "survey-core/defaultV2.min.css";
-import { themeJson } from "../data/theme";
-import { json } from '../data/jsonData';
-import { db } from "../config/firebase";
+import React, { useState } from "react";
+import { Container, Typography, Box, Button, Slider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { db } from "../config/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
-const surveyJson = json;
+const marks = [
+  { value: 0, label: "Strongly disagree" },
+  { value: 10, label: "Disagree" },
+  { value: 20, label: "Neutral" },
+  { value: 30, label: "Agree" },
+  { value: 40, label: "Strongly Agree" },
+];
 
-function SurveyPage() {
-  const survey = new Model(surveyJson);
-  survey.applyTheme(themeJson);
+const getLabelFromValue = (value) => {
+  if (value % 10 === 0) {
+    // If the value is exactly on a mark
+    const mark = marks.find((mark) => mark.value === value);
+    return mark ? mark.label : '';
+  } else {
+    // If the value is between marks
+    const lowerMark = marks.find((mark) => mark.value < value && value < mark.value + 10);
+    const higherMark = marks.find((mark) => mark.value > value && value < mark.value);
+    
+    return lowerMark && higherMark
+      ? `Between ${lowerMark.label} and ${higherMark.label}`
+      : '';
+  }
+};
+
+const SurveyPage = () => {
+  const [responses, setResponses] = useState({
+    question1: 20,
+    question2: 20,
+  });
+
   const navigate = useNavigate();
-
   const infoCollectionRef = collection(db, "questionnaire");
 
-  const onSubmitInfo = async (info) => {
+  const handleSliderChange = (event, newValue, question) => {
+    setResponses({ ...responses, [question]: newValue });
+  };
+
+  const handleSubmit = async () => {
     try {
-      // Retrieve participantCode and videoID from local storage
       const participantCode = localStorage.getItem("participantCode");
       const participantVideoList = JSON.parse(localStorage.getItem("videostoWatch"));
       const videoID = Object.keys(participantVideoList)[0]; // Get the first video ID
       const videoType = participantVideoList[videoID][0]; // Get the first value for the videoID, which is the video type
-  
-      // Create the data object to be sent to Firestore
+
       const data = {
-        participantCode: participantCode,
-        videoID: videoID,
-        videoType: videoType,
-        ...info, // Spread the survey results into the data object
+        participantCode,
+        videoID,
+        videoType,
+        responses,
       };
-  
+
       console.log("Data to be sent to Firestore:", data);
-  
-      // Add the data to Firestore
       await addDoc(infoCollectionRef, data);
-      console.log("Data successfully added to Firestore");
-  
-      // Proceed with the logic
-      const arr = participantVideoList[videoID]; 
-      
+
+      const arr = participantVideoList[videoID];
       if (arr && arr.length > 0) {
-        // Remove the first item from the array
         participantVideoList[videoID] = arr.slice(1);
-        
-        // If the array is empty after slicing, remove the entire videoID object
+
         if (participantVideoList[videoID].length === 0) {
           delete participantVideoList[videoID];
         }
-  
-        // If the entire `participantVideoList` is empty, proceed to the final survey
+
         if (Object.keys(participantVideoList).length === 0) {
           localStorage.setItem("videostoWatch", JSON.stringify(participantVideoList));
-          navigate('/FinalSurvey'); // Navigate to the final survey page
+          navigate('/FinalSurvey');
         } else if (!participantVideoList[videoID]) {
-          // If the videoID is removed and there are other video IDs, proceed to no description page
           localStorage.setItem("videostoWatch", JSON.stringify(participantVideoList));
-          navigate('/NoDesc'); // Navigate to the no description page
+          navigate('/NoDesc');
         } else {
-          // If the array is not empty, proceed to the video page
           localStorage.setItem("videostoWatch", JSON.stringify(participantVideoList));
-          navigate('/VideoPage'); // Navigate to the video page
+          navigate('/VideoPage');
         }
       } else {
         console.error("Array for the videoID is not found or is already empty.");
@@ -72,20 +83,176 @@ function SurveyPage() {
       console.error("Error adding document to Firestore:", err);
     }
   };
-  
 
-  const surveyComplete = useCallback((sender) => {
-    onSubmitInfo(sender.data);
-  }, []);
+  return (
+    <Container maxWidth="md">
+      <Box padding={4}>
+        <Typography variant="h3" gutterBottom component="h1" tabIndex={0}>
+          Feedback
+        </Typography>
+        <Typography variant="subtitle1" gutterBottom component="h2" tabIndex={0}>
+          To what extent do you agree with the following statements?
+        </Typography>
 
-  survey.onComplete.add(surveyComplete);
+        <Box mt={4} role="group" aria-labelledby="slider-question1-label">
+          <Typography
+            variant="h6"
+            gutterBottom
+            component="h3"
+            id="slider-question1-label"
+            tabIndex={0}
+          >
+            1. AI-generated descriptions helped me grasp the main content and visual details of the videos.
+          </Typography>
+          <Slider
+            value={responses.question1}
+            onChange={(event, newValue) => handleSliderChange(event, newValue, "question1")}
+            marks={marks}
+            step={5}
+            min={0}
+            max={40}
+            valueLabelDisplay="auto"
+            aria-valuetext={`AI-generated descriptions helped me grasp the main content and visual details of the videos: ${getLabelFromValue(responses.question1)}`}
+            aria-labelledby="slider-question1-label"
+            tabIndex={0}
+          />
+        </Box>
 
-  // Render your component based on the survey state
-  if (!survey) {
-    return <div>Loading...</div>; // or any other loading indicator
-  }
+        <Box mt={4} role="group" aria-labelledby="slider-question2-label">
+          <Typography
+            variant="h6"
+            gutterBottom
+            component="h3"
+            id="slider-question2-label"
+            tabIndex={0}
+          >
+            2. AI-generated descriptions enhanced the overall enjoyment of the video.
+          </Typography>
+          <Slider
+            value={responses.question2}
+            onChange={(event, newValue) => handleSliderChange(event, newValue, "question2")}
+            marks={marks}
+            step={5}
+            min={0}
+            max={40}
+            valueLabelDisplay="auto"
+            aria-valuetext={`AI-generated descriptions enhanced the overall enjoyment of the video: ${getLabelFromValue(responses.question2)}`}
+            aria-labelledby="slider-question2-label"
+            tabIndex={0}
+          />
+        </Box>
 
-  return <Survey model={survey} />;
-}
+        <Box mt={6}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            aria-label="Complete and submit the survey"
+            tabIndex={0}
+            sx={{
+            fontSize: "1rem",
+            fontWeight: "bold",
+          }}
+          >
+            Complete
+          </Button>
+        </Box>
+      </Box>
+    </Container>
+  );
+};
 
 export default SurveyPage;
+
+
+// import React, { useCallback } from "react";
+// import 'survey-core/defaultV2.min.css';
+// import { Model } from 'survey-core';
+// import { Survey } from 'survey-react-ui';
+// import "survey-core/defaultV2.min.css";
+// import { themeJson } from "../data/theme";
+// import { json } from '../data/jsonData';
+// import { db } from "../config/firebase";
+// import { useNavigate } from "react-router-dom";
+// import { collection, addDoc } from "firebase/firestore";
+
+// const surveyJson = json;
+
+// function SurveyPage() {
+//   const survey = new Model(surveyJson);
+//   survey.applyTheme(themeJson);
+//   const navigate = useNavigate();
+
+//   const infoCollectionRef = collection(db, "questionnaire");
+
+//   const onSubmitInfo = async (info) => {
+//     try {
+//       // Retrieve participantCode and videoID from local storage
+//       const participantCode = localStorage.getItem("participantCode");
+//       const participantVideoList = JSON.parse(localStorage.getItem("videostoWatch"));
+//       const videoID = Object.keys(participantVideoList)[0]; // Get the first video ID
+//       const videoType = participantVideoList[videoID][0]; // Get the first value for the videoID, which is the video type
+  
+//       // Create the data object to be sent to Firestore
+//       const data = {
+//         participantCode: participantCode,
+//         videoID: videoID,
+//         videoType: videoType,
+//         ...info, // Spread the survey results into the data object
+//       };
+  
+//       console.log("Data to be sent to Firestore:", data);
+  
+//       // Add the data to Firestore
+//       await addDoc(infoCollectionRef, data);
+//       console.log("Data successfully added to Firestore");
+  
+//       // Proceed with the logic
+//       const arr = participantVideoList[videoID]; 
+      
+//       if (arr && arr.length > 0) {
+//         // Remove the first item from the array
+//         participantVideoList[videoID] = arr.slice(1);
+        
+//         // If the array is empty after slicing, remove the entire videoID object
+//         if (participantVideoList[videoID].length === 0) {
+//           delete participantVideoList[videoID];
+//         }
+  
+//         // If the entire `participantVideoList` is empty, proceed to the final survey
+//         if (Object.keys(participantVideoList).length === 0) {
+//           localStorage.setItem("videostoWatch", JSON.stringify(participantVideoList));
+//           navigate('/FinalSurvey'); // Navigate to the final survey page
+//         } else if (!participantVideoList[videoID]) {
+//           // If the videoID is removed and there are other video IDs, proceed to no description page
+//           localStorage.setItem("videostoWatch", JSON.stringify(participantVideoList));
+//           navigate('/NoDesc'); // Navigate to the no description page
+//         } else {
+//           // If the array is not empty, proceed to the video page
+//           localStorage.setItem("videostoWatch", JSON.stringify(participantVideoList));
+//           navigate('/VideoPage'); // Navigate to the video page
+//         }
+//       } else {
+//         console.error("Array for the videoID is not found or is already empty.");
+//       }
+//     } catch (err) {
+//       console.error("Error adding document to Firestore:", err);
+//     }
+//   };
+  
+
+//   const surveyComplete = useCallback((sender) => {
+//     onSubmitInfo(sender.data);
+//   }, []);
+
+//   survey.onComplete.add(surveyComplete);
+
+//   // Render your component based on the survey state
+//   if (!survey) {
+//     return <div>Loading...</div>; // or any other loading indicator
+//   }
+
+//   return <Survey model={survey} />;
+// }
+
+// export default SurveyPage;

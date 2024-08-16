@@ -83,7 +83,7 @@ const VideoPlayer = (props) => {
       {/* {console.log("My current index and previous index", currentDescriptionIndex, prevDescriptionIndex)} */}
       {/* {props.yesDesc && ( */}
         <Grid mt={2}>
-          <h4>{currentDescription.descriptions}</h4>
+          {/* <h4>{currentDescription.descriptions}</h4> */}
           {currentDescriptionIndex !== -1 &&
             currentDescription.descriptions !== "No description playing" && (
               <TextToSpeech
