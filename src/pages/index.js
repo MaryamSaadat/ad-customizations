@@ -12,3 +12,4 @@ export { default as NoDescPage} from './NoDescPage';
 export { default as FinalSurvey} from './FinalSurvey';
 export { default as NoDescSurvey} from './NoDescSurvey';
 export { default as AddParticipant} from './AddParticipant';
+export { default as Instructions} from './Instructions';

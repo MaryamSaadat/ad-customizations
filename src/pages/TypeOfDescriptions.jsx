@@ -29,7 +29,7 @@ const TypeOfDescriptions = () => {
   }, []);
 
   const handleProceed = () => {
-    navigate('/NoDesc');
+    navigate('/Instructions');
   };
 
   return (
