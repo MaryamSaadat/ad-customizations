@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Container, Typography, Box, Button, Slider } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Container, Typography, Box, Button, Slider, TextField, RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { db } from "../config/firebase";
 import { collection, addDoc } from "firebase/firestore";
@@ -14,14 +14,12 @@ const marks = [
 
 const getLabelFromValue = (value) => {
   if (value % 10 === 0) {
-    // If the value is exactly on a mark
     const mark = marks.find((mark) => mark.value === value);
     return mark ? mark.label : '';
   } else {
-    // If the value is between marks
     const lowerMark = marks.find((mark) => mark.value < value && value < mark.value + 10);
     const higherMark = marks.find((mark) => mark.value > value && value < mark.value);
-    
+
     return lowerMark && higherMark
       ? `Between ${lowerMark.label} and ${higherMark.label}`
       : '';
@@ -32,13 +30,32 @@ const SurveyPage = () => {
   const [responses, setResponses] = useState({
     question1: 20,
     question2: 20,
+    question3: 20,
+    preferredCustomization: "",  // New state for preferred customization
+    reasonForPreference: "",     // New state for the reason for preference
   });
 
+  const [compare, setCompare] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const participantVideoList = JSON.parse(localStorage.getItem("videostoWatch"));
+    const videoID = Object.keys(participantVideoList)[0]; // Get the first video ID
+    const videoArray = participantVideoList[videoID]; // Get the first value for the videoID, which is the video type
+
+    if (videoArray.length === 1) {
+      setCompare(true);
+    }
+  }, []); // Empty dependency array means this useEffect runs only once after the initial render
+
   const infoCollectionRef = collection(db, "questionnaire");
 
   const handleSliderChange = (event, newValue, question) => {
     setResponses({ ...responses, [question]: newValue });
+  };
+
+  const handleTextChange = (event) => {
+    setResponses({ ...responses, [event.target.name]: event.target.value });
   };
 
   const handleSubmit = async () => {
@@ -102,7 +119,7 @@ const SurveyPage = () => {
             id="slider-question1-label"
             tabIndex={0}
           >
-            1. AI-generated descriptions helped me grasp the main content and visual details of the videos.
+            1. AI-generated descriptions helped me grasp the main content of the video.
           </Typography>
           <Slider
             value={responses.question1}
@@ -112,8 +129,9 @@ const SurveyPage = () => {
             min={0}
             max={40}
             valueLabelDisplay="auto"
-            aria-valuetext={`AI-generated descriptions helped me grasp the main content and visual details of the videos: ${getLabelFromValue(responses.question1)}`}
+            aria-valuetext={`AI-generated descriptions helped me grasp the main content of the video: ${getLabelFromValue(responses.question1)}`}
             aria-labelledby="slider-question1-label"
+            aria-label="Slider for question 1"
             tabIndex={0}
           />
         </Box>
@@ -126,7 +144,7 @@ const SurveyPage = () => {
             id="slider-question2-label"
             tabIndex={0}
           >
-            2. AI-generated descriptions enhanced the overall enjoyment of the video.
+            2. AI-generated descriptions helped me grasp the visual details of the video.
           </Typography>
           <Slider
             value={responses.question2}
@@ -136,11 +154,88 @@ const SurveyPage = () => {
             min={0}
             max={40}
             valueLabelDisplay="auto"
-            aria-valuetext={`AI-generated descriptions enhanced the overall enjoyment of the video: ${getLabelFromValue(responses.question2)}`}
+            aria-valuetext={`AI-generated descriptions helped me grasp the visual details of the video: ${getLabelFromValue(responses.question2)}`}
             aria-labelledby="slider-question2-label"
+            aria-label="Slider for question 2"
             tabIndex={0}
           />
         </Box>
+
+        <Box mt={4} role="group" aria-labelledby="slider-question3-label">
+          <Typography
+            variant="h6"
+            gutterBottom
+            component="h3"
+            id="slider-question3-label"
+            tabIndex={0}
+          >
+            3. AI-generated descriptions enhanced the overall enjoyment of the video.
+          </Typography>
+          <Slider
+            value={responses.question3}
+            onChange={(event, newValue) => handleSliderChange(event, newValue, "question3")}
+            marks={marks}
+            step={5}
+            min={0}
+            max={40}
+            valueLabelDisplay="auto"
+            aria-valuetext={`AI-generated descriptions enhanced the overall enjoyment of the video: ${getLabelFromValue(responses.question3)}`}
+            aria-labelledby="slider-question3-label"
+            aria-label="Slider for question 3"
+            tabIndex={0}
+          />
+        </Box>
+
+        {compare && (
+          <>
+            <Box mt={4} role="group" aria-labelledby="compare-question-label">
+              <Typography
+                variant="h6"
+                gutterBottom
+                component="h3"
+                id="compare-question-label"
+                tabIndex={0}
+              >
+                4. Which version of the video with audio descriptions did you prefer?
+              </Typography>
+              <RadioGroup
+                aria-labelledby="compare-question-label"
+                name="preferredCustomization"
+                value={responses.preferredCustomization}
+                onChange={handleTextChange}
+                aria-label="Radio group for preferred customization"
+                tabIndex={0}
+              >
+                <FormControlLabel value="customization1" control={<Radio />} label="Version 1 with descriptions" tabIndex={0} aria-label="Customization 1" />
+                <FormControlLabel value="customization2" control={<Radio />} label="Version 2 with descriptions" tabIndex={0} aria-label="Customization 2" />
+              </RadioGroup>
+            </Box>
+
+            <Box mt={4} role="group" aria-labelledby="reason-question-label">
+              <Typography
+                variant="h6"
+                gutterBottom
+                component="h3"
+                id="reason-question-label"
+                tabIndex={0}
+              >
+                5. Why did you prefer that customization?
+              </Typography>
+              <TextField
+                fullWidth
+                name="reasonForPreference"
+                value={responses.reasonForPreference}
+                onChange={handleTextChange}
+                variant="outlined"
+                multiline
+                rows={4}
+                aria-labelledby="reason-question-label"
+                aria-label="Text field for reason why preferred customization"
+                tabIndex={0}
+              />
+            </Box>
+          </>
+        )}
 
         <Box mt={6}>
           <Button
@@ -150,9 +245,9 @@ const SurveyPage = () => {
             aria-label="Complete and submit the survey"
             tabIndex={0}
             sx={{
-            fontSize: "1rem",
-            fontWeight: "bold",
-          }}
+              fontSize: "1rem",
+              fontWeight: "bold",
+            }}
           >
             Complete
           </Button>

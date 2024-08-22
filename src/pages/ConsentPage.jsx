@@ -209,10 +209,6 @@ const ConsentPage = () => {
           confidentiality of interception of data sent via the Internet by any
           third parties.
           <br />
-          With your permission, the interview will be audio-recorded so that an
-          accurate transcript can be made. Once the transcription is complete,
-          the recordings will be erased. Your name will not be in the transcript
-          or study notes.
         </Typography>
         <Typography variant="h6" tabIndex={0}>
           Compensation:
@@ -250,7 +246,7 @@ const ConsentPage = () => {
           Whatever you decide will in no way penalize you or result in loss of
           benefits or services to which you are otherwise entitled.
           <br />
-          You will receive partial payment for the study of $20.
+          You will not receive a partial payment for the study.
         </Typography>
         <Typography variant="h6" tabIndex={0}>
           Rights and Concerns:
@@ -282,7 +278,7 @@ const ConsentPage = () => {
           variant="outlined"
           value={date}
           onChange={handleDateChange}
-          aria-label="Date Signed"
+          aria-label="Enter today's date"
           sx={{ marginBottom: 2 }}
           required
           inputProps={{

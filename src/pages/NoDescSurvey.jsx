@@ -90,6 +90,7 @@ const SliderSurvey = () => {
   const [responses, setResponses] = useState({
     question1: 20,
     question2: 20,
+    question3: 20,
   });
   const location = useLocation();
   const navigate = useNavigate();
@@ -133,7 +134,7 @@ const SliderSurvey = () => {
             id="slider-question1-label"
             tabIndex={0}
           >
-            1. I was able to grasp the main content and visual details of the video without audio descriptions.
+            1. I was able to grasp the main content of the video without audio descriptions.
           </Typography>
           <Slider
             value={responses.question1}
@@ -143,7 +144,7 @@ const SliderSurvey = () => {
             min={0}
             max={40}
             valueLabelDisplay="auto"
-            aria-valuetext={`I was able to grasp the main content and visual details of the video without audio descriptions: ${getLabelFromValue(responses.question1)}`}
+            aria-valuetext={`I was able to grasp the main content of the video without audio descriptions: ${getLabelFromValue(responses.question1)}`}
             aria-labelledby="slider-question1-label"
             tabIndex={0}
           />
@@ -157,7 +158,7 @@ const SliderSurvey = () => {
             id="slider-question2-label"
             tabIndex={0}
           >
-            2. I enjoyed watching the video without any audio descriptions.
+            2. I was able to grasp the visual content of the video without audio descriptions.
           </Typography>
           <Slider
             value={responses.question2}
@@ -167,8 +168,32 @@ const SliderSurvey = () => {
             min={0}
             max={40}
             valueLabelDisplay="auto"
-            aria-valuetext={`I enjoyed watching the video without any audio descriptions: ${getLabelFromValue(responses.question2)}`}
+            aria-valuetext={`I was able to grasp the visual content of the video without audio descriptions: ${getLabelFromValue(responses.question2)}`}
             aria-labelledby="slider-question2-label"
+            tabIndex={0}
+          />
+        </Box>
+
+        <Box mt={4} role="group" aria-labelledby="slider-question3-label">
+          <Typography
+            variant="h6"
+            gutterBottom
+            component="h3"
+            id="slider-question3-label"
+            tabIndex={0}
+          >
+            3. I enjoyed watching the video without any audio descriptions.
+          </Typography>
+          <Slider
+            value={responses.question3}
+            onChange={(event, newValue) => handleSliderChange(event, newValue, "question3")}
+            marks={marks}
+            step={5}
+            min={0}
+            max={40}
+            valueLabelDisplay="auto"
+            aria-valuetext={`I enjoyed watching the video without any audio descriptions: ${getLabelFromValue(responses.question3)}`}
+            aria-labelledby="slider-question3-label"
             tabIndex={0}
           />
         </Box>

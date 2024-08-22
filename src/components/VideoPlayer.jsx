@@ -9,7 +9,7 @@ const VideoPlayer = (props) => {
   const video = props.path;
 
   const defaultDescription = {
-    descriptions: "No description playing",
+    descriptions: "",
     time_stamp_start: "-",
     time_stamp_end: "-",
   };
@@ -84,8 +84,7 @@ const VideoPlayer = (props) => {
       {/* {props.yesDesc && ( */}
         <Grid mt={2}>
           {/* <h4>{currentDescription.descriptions}</h4> */}
-          {currentDescriptionIndex !== -1 &&
-            currentDescription.descriptions !== "No description playing" && (
+          {currentDescriptionIndex !== -1 && (
               <TextToSpeech
                 text={currentDescription.descriptions}
                 parentCallback={handleCallback}

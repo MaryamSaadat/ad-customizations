@@ -201,7 +201,7 @@ const VideoPage = () => {
           You will now watch the video with audio descriptions. The audio
           descriptions may or may not have your customizations applied to it.
           You are to watch the video with the customizations and rate them on
-          the next page.
+          the next page. You can also adjust the speed of the audio description text to speech.
         </Typography>
 
         {/* Visible text instructions */}
@@ -211,7 +211,7 @@ const VideoPage = () => {
               You will now watch the video with audio descriptions. The audio
               descriptions may or may not have your customizations applied to
               it. You are to watch the video with the customizations and rate
-              them on the next page.
+              them on the next page. You can also adjust the speed of the audio description text to speech.
             </Typography>
           </Grid>
           <Grid item md={8}>

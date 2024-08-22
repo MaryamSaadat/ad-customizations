@@ -21,8 +21,8 @@ const Instructions = () => {
         <ul>
           <li tabIndex="0">First, you will watch the video without any descriptions.</li>
           <li tabIndex="0">After watching, you will provide your ratings.</li>
-          <li tabIndex="0">Next, you will select customizations, and you will watch the video again twice, once with your customizations, and once with control customizations.</li>
-          <li tabIndex="0">The order of the customized and control variation will be randomized, so you will not know which variation includes your customizations.</li>
+          <li tabIndex="0">Next, you will select customizations, and you will watch the video again twice, once with your customizations, and once without your customizations.</li>
+          <li tabIndex="0">The order of the variation will be randomized, so you will not know which variation includes your customizations.</li>
           <li tabIndex="0">After watching with the customizations, you will again provide your ratings.</li>
         </ul>
         <Typography variant="body1" component="p" mt={2} tabIndex="0">

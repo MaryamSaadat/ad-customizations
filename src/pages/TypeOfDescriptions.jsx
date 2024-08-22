@@ -49,43 +49,43 @@ const TypeOfDescriptions = () => {
         Types of Descriptions for the Video
       </Typography>
       <Box my={2}>
-        <Typography variant="h6" tabIndex={0}>Concise: Brief descriptions</Typography>
+        <Typography variant="h6" tabIndex={0}>Concise customization: Brief descriptions</Typography>
         <Typography variant="body1" tabIndex={0}>
           {descriptions.concise}
         </Typography>
       </Box>
       <Box my={2}>
-        <Typography variant="h6" tabIndex={0}>Detail: Longer descriptions with additional visual details</Typography>
+        <Typography variant="h6" tabIndex={0}>Detail customization: Longer descriptions with additional visual details</Typography>
         <Typography variant="body1" tabIndex={0}>
           {descriptions.detail}
         </Typography>
       </Box>
       <Box my={2}>
-        <Typography variant="h6" tabIndex={0}>Main story: audio descriptions only focus on visual elements vital to understanding</Typography>
+        <Typography variant="h6" tabIndex={0}>Main story customization: audio descriptions only focus on visual elements vital to understanding</Typography>
         <Typography variant="body1" tabIndex={0}>
           {descriptions.main}
         </Typography>
       </Box>
       <Box my={2}>
-        <Typography variant="h6" tabIndex={0}>Character: Audio descriptions that provide additional details about character's visual details</Typography>
+        <Typography variant="h6" tabIndex={0}>Character customization: Audio descriptions that provide additional details about character's visual details</Typography>
         <Typography variant="body1" tabIndex={0}>
           {descriptions.character}
         </Typography>
       </Box>
       <Box my={2}>
-        <Typography variant="h6" tabIndex={0}>Settings: audio descriptions that provide additional details about the scenes</Typography>
+        <Typography variant="h6" tabIndex={0}>Environment customization: audio descriptions that provide additional details about the scenes</Typography>
         <Typography variant="body1" tabIndex={0}>
           {descriptions.environment}
         </Typography>
       </Box>
       <Box my={2}>
-        <Typography variant="h6" tabIndex={0}>Interpretations: includes subjectivity in the audio descriptions</Typography>
+        <Typography variant="h6" tabIndex={0}>Interpretation customization: includes subjectivity in the audio descriptions</Typography>
         <Typography variant="body1" tabIndex={0}>
           {descriptions.interpretation}
         </Typography>
       </Box>
       <Box my={2}>
-        <Typography variant="h6" tabIndex={0}>No interpretations: includes little to no subjectivity in the audio descriptions</Typography>
+        <Typography variant="h6" tabIndex={0}>No interpretation customization: includes little to no subjectivity in the audio descriptions</Typography>
         <Typography variant="body1" tabIndex={0}>
           {descriptions.objective}
         </Typography>
